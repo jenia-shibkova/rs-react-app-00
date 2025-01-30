@@ -1,0 +1,6 @@
+.button-wrapper {
+  background-color: orange;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
