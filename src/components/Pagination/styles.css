@@ -7,7 +7,6 @@
   flex-wrap: wrap;
 }
 
-
 @media (max-width: 1024px) {
   .pagination {
     width: 100%;
