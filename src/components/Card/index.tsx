@@ -5,7 +5,6 @@ import './styles.css';
 class Card extends Component<CardProps> {
   render() {
     const { name, url, comics, series, stories } = this.props;
-    console.log('comics, series, stories', comics, series, stories);
 
     return (
       <div className="card">

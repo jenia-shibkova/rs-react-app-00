@@ -1,6 +1,5 @@
-import { MarvelDataResponse } from '../../api';
-
+import { MarvelItem } from '../../api/interfaces';
 export interface ListProps {
-  items: MarvelDataResponse['data']['data']['results'];
+  items: MarvelItem[] | [];
   isFetching: boolean;
 }

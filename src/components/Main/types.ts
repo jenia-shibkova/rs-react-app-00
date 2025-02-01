@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import { MarvelItem } from '../../api';
+import { MarvelItem } from '../../api/interfaces';
 
 export interface MainProps {
   handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void;

@@ -1,12 +1,14 @@
 import { Component, ChangeEvent } from 'react';
 import Main from './components/Main';
 import ErrorBoundary from './components/ErrorBoundary';
-import { getMarvelData, MarvelItem } from './api';
+import { getMarvelData } from './api';
+import { MarvelItem } from './api/interfaces';
 import './App.css';
 
 interface AppState {
   typedValue: string;
   data: MarvelItem[] | [];
+  total: number;
   limit: number;
   offset: number;
   text: string;
@@ -20,8 +22,9 @@ class App extends Component<object, AppState> {
     this.state = {
       typedValue: '',
       data: [],
+      total: 10,
       limit: 10,
-      offset: 1,
+      offset: 0,
       text: '',
       amountOfPages: 0,
       isFetching: false,
@@ -33,47 +36,48 @@ class App extends Component<object, AppState> {
   }
 
   componentDidMount() {
-    const storedPrompt = localStorage.getItem('prompt');
-    if (storedPrompt) {
-      this.setState({ typedValue: storedPrompt }, () => {
-        // getUserData(this.state.limit, this.state.offset, storedPrompt).then((res) => {
-        //   this.setState({ data: res });
-        // });
-      });
-    } else {
-      this.setState({ typedValue: '' }, () => {
-        getMarvelData(this.state.limit, this.state.offset, '').then((res) => {
-          console.log('res...', res?.data?.data?.results);
-          this.setState({ data: res?.data?.data?.results });
+    try {
+      this.setState({ isFetching: true });
+      const searchValue: string = localStorage.getItem('search-value') || '';
+
+      this.setState({ text: searchValue, typedValue: searchValue }, () => {
+        getMarvelData(this.state.limit, this.state.offset, searchValue).then((res) => {
+          this.setState({
+            data: res?.data?.data?.results,
+            total: res?.data?.data?.total,
+            isFetching: false
+          });
         });
       });
+    } catch (error) {
+      console.error('Error while fetching data:', error);
     }
   }
 
   handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-    console.log('this.state.text____', this.state.text);
-    // localStorage.setItem('prompt', this.state.typedValue);
-    // this.setState({ typedValue: newValue, offset: 1 });
-
     const newValue = event.target.value;
-    // localStorage.setItem('prompt', this.state.typedValue);
-    this.setState({ text: newValue, offset: 1 });
+    this.setState({ text: newValue, offset: 0 });
   }
 
   handleClick() {
-    // ...
-    console.log('CLICK');
     this.setState({ isFetching: true });
+    localStorage.setItem('search-value', this.state.text); 
 
     getMarvelData(this.state.limit, this.state.offset, this.state.text).then(
       (res) => {
-        localStorage.setItem('prompt', this.state.typedValue);
-        this.setState({ data: res?.data?.data?.results, isFetching: false });
+        this.setState({
+          data: res?.data?.data?.results,
+          total: res?.data?.data?.total,
+          isFetching: false,
+        });
       }
     );
   }
 
   handleNext = () => {
+    if ((this.state.total - this.state.offset) < this.state.limit) {
+      return;
+    }
     this.setState(
       (prevState) => ({
         offset: prevState.offset + this.state.limit,
@@ -85,10 +89,9 @@ class App extends Component<object, AppState> {
   };
 
   handlePrev = () => {
-    if (this.state.offset === 1) {
+    if (this.state.offset === 0) {
       return;
     }
-    console.log('this.state.offset', this.state.offset);
     this.setState(
       (prevState) => {
         return {
