@@ -17,6 +17,14 @@ class List extends Component<ListProps> {
       );
     }
 
+    if (this.props.errorMessage) {
+      return (
+        <div className="list-container">
+          <h2 className="error-message">{this.props.errorMessage}</h2>
+        </div>
+      );
+    }
+
     if (items?.length) {
       return (
         <div>

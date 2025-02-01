@@ -2,24 +2,20 @@ import { Component } from 'react';
 import './styles.css';
 
 interface State {
-  counter: number;
+  hasError: boolean;
 }
 
 class ErrorButton extends Component<object, State> {
-  constructor(props: object) {
-    super(props);
-    this.state = { counter: 0 };
-    this.handleClick = this.handleClick.bind(this);
-  }
+  state: State = {
+    hasError: false,
+  };
 
-  handleClick() {
-    this.setState(({ counter }) => ({
-      counter: counter + 1,
-    }));
-  }
+  handleClick = (): void => {
+    this.setState({ hasError: true });
+  };
 
   render() {
-    if (this.state.counter === 1) {
+    if (this.state.hasError) {
       throw new Error('I crashed!');
     }
     return (

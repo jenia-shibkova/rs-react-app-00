@@ -17,7 +17,12 @@ class Main extends Component<MainProps> {
             handleClick={this.props.handleClick}
             text={this.props.text}
           />
-          <List items={this.props.data} isFetching={this.props.isFetching} />
+
+          <List
+            errorMessage={this.props.errorMessage}
+            items={this.props.data}
+            isFetching={this.props.isFetching}
+          />
         </div>
 
         {this.props.data && this.props.data.length > 0 && (

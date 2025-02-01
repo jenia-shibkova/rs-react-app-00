@@ -14,6 +14,7 @@ interface AppState {
   text: string;
   amountOfPages: number;
   isFetching: boolean;
+  error: string;
 }
 
 class App extends Component<object, AppState> {
@@ -28,11 +29,8 @@ class App extends Component<object, AppState> {
       text: '',
       amountOfPages: 0,
       isFetching: false,
+      error: '',
     };
-
-    this.handleInputChange = this.handleInputChange.bind(this);
-
-    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -46,31 +44,40 @@ class App extends Component<object, AppState> {
             data: res?.data?.data?.results,
             total: res?.data?.data?.total,
             isFetching: false,
+            error: '',
           });
         });
       });
     } catch (error) {
       console.error('Error while fetching data:', error);
+      this.setState({ error: 'Sorry, something went wrong' });
+      this.setState({ isFetching: false });
     }
   }
 
-  handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+  handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
     this.setState({ text: newValue, offset: 0 });
-  }
+  };
 
-  handleClick() {
+  handleClick = async () => {
     this.setState({ isFetching: true });
     localStorage.setItem('search-value', this.state.text);
-
-    getMarvelData(this.state.limit, this.state.offset, this.state.text).then((res) => {
-      this.setState({
-        data: res?.data?.data?.results,
-        total: res?.data?.data?.total,
-        isFetching: false,
+    try {
+      await getMarvelData(this.state.limit, this.state.offset, this.state.text).then((res) => {
+        this.setState({
+          data: res?.data?.data?.results,
+          total: res?.data?.data?.total,
+          isFetching: false,
+          error: '',
+        });
       });
-    });
-  }
+    } catch (error) {
+      console.error('Error while fetching data:', error);
+      this.setState({ error: 'Sorry, something went wrong' });
+      this.setState({ isFetching: false });
+    }
+  };
 
   handleNext = () => {
     if (this.state.total - this.state.offset < this.state.limit) {
@@ -114,6 +121,7 @@ class App extends Component<object, AppState> {
             text={this.state.text}
             data={this.state.data}
             isFetching={this.state.isFetching}
+            errorMessage={this.state.error}
           />
         </ErrorBoundary>
       </>

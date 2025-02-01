@@ -9,4 +9,5 @@ export interface MainProps {
   text: string;
   data: MarvelItem[] | [];
   isFetching: boolean;
+  errorMessage: string;
 }
