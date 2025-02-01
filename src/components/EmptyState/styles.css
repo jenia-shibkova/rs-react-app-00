@@ -1,0 +1,17 @@
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.empty-state-image {
+  width: 100px;
+  height: 150px;
+}
+
+.empty-text {
+  font-size: 18px;
+  line-height: 20px;
+  color: #ccc;
+}

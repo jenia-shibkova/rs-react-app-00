@@ -1,4 +1,4 @@
-import { Component, ErrorInfo  } from 'react';
+import { Component, ErrorInfo } from 'react';
 import { ErrorBoundaryProps, ErrorBoundaryState } from './types.ts';
 import './styles.css';
 
@@ -16,14 +16,14 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, info: ErrorInfo ) {
-    console.log("Error caught by ErrorBoundary:", error);
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.log('Error caught by ErrorBoundary:', error);
     console.error('Error info:', info);
   }
 
-  handleClose = ()=> {
-    this.setState({ hasError: false })
-  }
+  handleClose = () => {
+    this.setState({ hasError: false });
+  };
 
   render() {
     if (this.state.hasError) {
@@ -31,12 +31,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         <>
           <div className="error">
             <div className="error-overlay" onClick={this.handleClose}></div>
-              <div className="error-inner">
-                <p className="error-title">Something went wrong</p>
-                <button className="error-btn" onClick={this.handleClose}>
-                  Close
-                </button>
-              </div>
+            <div className="error-inner">
+              <p className="error-title">Something went wrong</p>
+              <button className="error-btn" onClick={this.handleClose}>
+                Close
+              </button>
+            </div>
           </div>
         </>
       );

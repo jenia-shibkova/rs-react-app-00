@@ -24,9 +24,10 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
+  /* display: flex;
   min-width: 320px;
-  height: 100vh;
+  height: 1000;
+  /* height: 100vh; */
   background-color: black;
 }
 

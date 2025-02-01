@@ -1,17 +1,6 @@
-export interface ListData {
-	total_count: number;
-	incomplete_results: boolean;
-	items: [
-		{
+import { MarvelDataResponse } from '../../api';
 
-		},
-	];
-}
-			
 export interface ListProps {
-	items: Array<any>;
-	// html_url: string;
-	// avatar_url: string;
-	// login: string;
-	isFetching: boolean;
+  items: MarvelDataResponse['data']['data']['results'];
+  isFetching: boolean;
 }

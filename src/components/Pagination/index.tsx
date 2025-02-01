@@ -3,18 +3,16 @@ import { PaginationProps } from './types.ts';
 import './styles.css';
 
 class Pagination extends Component<PaginationProps> {
-	render() {
-		// const { items } = this.props;
+  render() {
+    const { handleNext, handlePrev } = this.props;
 
-		// const { html_url, avatar_url, login } = this.props;
-
-		return (
-			<div className="pagination">
-				<button>&larr;</button>
-				<button>&rarr;</button>
-			</div>
-		)
-	}
+    return (
+      <div className="pagination">
+        <button onClick={handlePrev}>&larr;</button>
+        <button onClick={handleNext}>&rarr;</button>
+      </div>
+    );
+  }
 }
 
 export default Pagination;

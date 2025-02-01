@@ -1,9 +1,12 @@
 import { ChangeEvent } from 'react';
+import { MarvelItem } from '../../api';
 
 export interface MainProps {
-	handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
-	handleClick: () => void;
-	text: string;
-	data: any;
-	isFetching: boolean;
+  handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleClick: () => void;
+  handlePrev: () => void;
+  handleNext: () => void;
+  text: string;
+  data: MarvelItem[] | [];
+  isFetching: boolean;
 }

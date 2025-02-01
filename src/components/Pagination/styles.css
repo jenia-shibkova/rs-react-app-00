@@ -1,11 +1,22 @@
 .pagination {
-  width: 1280px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
-  margin-top: 20px;
-  background-color: white;
+}
+
+
+@media (max-width: 1024px) {
+  .pagination {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination {
+    gap: 5px;
+  }
 }
