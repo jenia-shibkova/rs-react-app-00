@@ -22,10 +22,7 @@ class Main extends Component<MainProps> {
 
         {this.props.data && this.props.data.length > 0 && (
           <div className="pagination-wrapper">
-            <Pagination
-              handlePrev={this.props.handlePrev}
-              handleNext={this.props.handleNext}
-            />
+            <Pagination handlePrev={this.props.handlePrev} handleNext={this.props.handleNext} />
           </div>
         )}
 

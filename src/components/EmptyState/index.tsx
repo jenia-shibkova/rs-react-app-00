@@ -7,11 +7,7 @@ class EmptyState extends Component {
     return (
       <div className="empty-state">
         <div className="empty-state-image">
-          <svg
-            viewBox="0 0 36 52"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
+          <svg viewBox="0 0 36 52" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <rect fill="#EC1D24" width="100%" height="100%"></rect>
             <path
               fill="#FEFEFE"

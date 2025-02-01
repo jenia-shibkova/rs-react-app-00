@@ -8,9 +8,7 @@ export async function getMarvelData(
   offset: number,
   text?: string,
 ): Promise<MarvelDataResponse> {
-  const searchValue = text
-    ? `/characters?nameStartsWith=${text}`
-    : '/characters';
+  const searchValue = text ? `/characters?nameStartsWith=${text}` : '/characters';
 
   try {
     const timestamp = Date.now();

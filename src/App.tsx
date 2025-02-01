@@ -45,7 +45,7 @@ class App extends Component<object, AppState> {
           this.setState({
             data: res?.data?.data?.results,
             total: res?.data?.data?.total,
-            isFetching: false
+            isFetching: false,
           });
         });
       });
@@ -61,21 +61,19 @@ class App extends Component<object, AppState> {
 
   handleClick() {
     this.setState({ isFetching: true });
-    localStorage.setItem('search-value', this.state.text); 
+    localStorage.setItem('search-value', this.state.text);
 
-    getMarvelData(this.state.limit, this.state.offset, this.state.text).then(
-      (res) => {
-        this.setState({
-          data: res?.data?.data?.results,
-          total: res?.data?.data?.total,
-          isFetching: false,
-        });
-      }
-    );
+    getMarvelData(this.state.limit, this.state.offset, this.state.text).then((res) => {
+      this.setState({
+        data: res?.data?.data?.results,
+        total: res?.data?.data?.total,
+        isFetching: false,
+      });
+    });
   }
 
   handleNext = () => {
-    if ((this.state.total - this.state.offset) < this.state.limit) {
+    if (this.state.total - this.state.offset < this.state.limit) {
       return;
     }
     this.setState(
@@ -84,7 +82,7 @@ class App extends Component<object, AppState> {
       }),
       () => {
         this.handleClick();
-      }
+      },
     );
   };
 
@@ -100,7 +98,7 @@ class App extends Component<object, AppState> {
       },
       () => {
         this.handleClick();
-      }
+      },
     );
   };
 
