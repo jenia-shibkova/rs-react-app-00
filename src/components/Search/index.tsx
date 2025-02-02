@@ -18,7 +18,11 @@ class Search extends Component<SearchProps> {
             value={this.props.text}
             onChange={this.props.handleInputChange}
           />
-          <button onClick={this.props.handleClick} className="search-button">
+          <button
+            onClick={this.props.handleClick}
+            className="search-button"
+            disabled={!this.props.text}
+          >
             Search
           </button>
         </div>
