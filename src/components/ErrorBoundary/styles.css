@@ -1,0 +1,15 @@
+.error {
+  padding-bottom: 20px;
+}
+
+.error-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: lightgray;
+}
+
+.error-btn {
+  width: 100px;
+}
