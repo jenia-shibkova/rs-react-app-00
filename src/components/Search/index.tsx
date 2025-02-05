@@ -4,7 +4,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import './styles.css';
 
 class Search extends Component<SearchProps> {
-  //type="button" onClick={onCancel} disabled={isLoading}
   render() {
     return (
       <div className="search-wrapper">
