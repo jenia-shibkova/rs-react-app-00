@@ -3,6 +3,7 @@ import Main from './components/Main';
 import ErrorBoundary from './components/ErrorBoundary';
 import { getMarvelData } from './api';
 import { MarvelItem } from './api/interfaces';
+import useLocalStorage from './hooks/useLocalStorage';
 import './App.css';
 
 const App = (): JSX.Element => {
@@ -11,8 +12,10 @@ const App = (): JSX.Element => {
   const [error, setError] = useState<string>('');
   const [total, setTotal] = useState<number>(10);
   const [offset, setOffset] = useState<number>(0);
-  const [searchValue, setSearchValue] = useState<string>('');
   const limit: number = 10;
+
+  const [localStorageValue, setLocalStorageStateValue] = useLocalStorage('search-value', '');
+  const [searchValue, setSearchValue] = useState<string>(localStorageValue);
 
   const fetchData = useCallback(async () => {
     try {
@@ -31,11 +34,9 @@ const App = (): JSX.Element => {
 
   useEffect(() => {
     setIsLoading(true);
-    const searchValue: string = localStorage.getItem('search-value') || '';
-    setSearchValue(searchValue);
 
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, searchValue]);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -45,7 +46,7 @@ const App = (): JSX.Element => {
 
   const handleClick = async () => {
     setIsLoading(true);
-    localStorage.setItem('search-value', searchValue);
+    setLocalStorageStateValue('search-value', searchValue);
 
     fetchData();
   };
