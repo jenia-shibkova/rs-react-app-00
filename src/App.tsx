@@ -1,132 +1,88 @@
-import { Component, ChangeEvent } from 'react';
+import { JSX, ChangeEvent, useState, useEffect, useCallback } from 'react';
 import Main from './components/Main';
 import ErrorBoundary from './components/ErrorBoundary';
 import { getMarvelData } from './api';
 import { MarvelItem } from './api/interfaces';
 import './App.css';
 
-interface AppState {
-  typedValue: string;
-  data: MarvelItem[] | [];
-  total: number;
-  limit: number;
-  offset: number;
-  text: string;
-  amountOfPages: number;
-  isFetching: boolean;
-  error: string;
-}
+const App = (): JSX.Element => {
+  const [cardsData, setCardsData] = useState<MarvelItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [total, setTotal] = useState<number>(10);
+  const [offset, setOffset] = useState<number>(0);
+  const [searchValue, setSearchValue] = useState<string>('');
+  const limit: number = 10;
 
-class App extends Component<object, AppState> {
-  constructor(props: object) {
-    super(props);
-    this.state = {
-      typedValue: '',
-      data: [],
-      total: 10,
-      limit: 10,
-      offset: 0,
-      text: '',
-      amountOfPages: 0,
-      isFetching: false,
-      error: '',
-    };
-  }
-
-  componentDidMount() {
+  const fetchData = useCallback(async () => {
     try {
-      this.setState({ isFetching: true });
-      const searchValue: string = localStorage.getItem('search-value') || '';
-
-      this.setState({ text: searchValue, typedValue: searchValue }, () => {
-        getMarvelData(this.state.limit, this.state.offset, searchValue).then((res) => {
-          this.setState({
-            data: res?.data?.data?.results,
-            total: res?.data?.data?.total,
-            isFetching: false,
-            error: '',
-          });
-        });
+      await getMarvelData(limit, offset, searchValue).then((res) => {
+        setCardsData(res?.data?.data?.results);
+        setTotal(res?.data?.data?.total);
       });
     } catch (error) {
       console.error('Error while fetching data:', error);
-      this.setState({ error: 'Sorry, something went wrong' });
-      this.setState({ isFetching: false });
+      setError('The search failed. Please, try again later');
+    } finally {
+      setIsLoading(false);
+      setError('');
     }
-  }
+  }, [offset, searchValue]);
 
-  handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    setIsLoading(true);
+    const searchValue: string = localStorage.getItem('search-value') || '';
+    setSearchValue(searchValue);
+
+    fetchData();
+  }, [fetchData]);
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
-    this.setState({ text: newValue, offset: 0 });
+    setSearchValue(newValue);
+    setOffset(0);
   };
 
-  handleClick = async () => {
-    this.setState({ isFetching: true });
-    localStorage.setItem('search-value', this.state.text);
-    try {
-      await getMarvelData(this.state.limit, this.state.offset, this.state.text).then((res) => {
-        this.setState({
-          data: res?.data?.data?.results,
-          total: res?.data?.data?.total,
-          isFetching: false,
-          error: '',
-        });
-      });
-    } catch (error) {
-      console.error('Error while fetching data:', error);
-      this.setState({ error: 'Sorry, something went wrong' });
-      this.setState({ isFetching: false });
-    }
+  const handleClick = async () => {
+    setIsLoading(true);
+    localStorage.setItem('search-value', searchValue);
+
+    fetchData();
   };
 
-  handleNext = () => {
-    if (this.state.total - this.state.offset < this.state.limit) {
+  const handleNext = (): void => {
+    if (total - offset < limit) {
       return;
     }
-    this.setState(
-      (prevState) => ({
-        offset: prevState.offset + this.state.limit,
-      }),
-      () => {
-        this.handleClick();
-      },
-    );
+    setOffset((prevValue) => prevValue + limit);
+    handleClick();
   };
 
-  handlePrev = () => {
-    if (this.state.offset === 0) {
+  const handlePrev = (): void => {
+    if (offset === 0) {
       return;
     }
-    this.setState(
-      (prevState) => {
-        return {
-          offset: prevState.offset - this.state.limit,
-        };
-      },
-      () => {
-        this.handleClick();
-      },
-    );
+
+    setOffset((prevValue) => prevValue - limit);
+    handleClick();
   };
 
-  render() {
-    return (
-      <>
-        <ErrorBoundary>
-          <Main
-            handleInputChange={this.handleInputChange}
-            handleClick={this.handleClick}
-            handlePrev={this.handlePrev}
-            handleNext={this.handleNext}
-            text={this.state.text}
-            data={this.state.data}
-            isFetching={this.state.isFetching}
-            errorMessage={this.state.error}
-          />
-        </ErrorBoundary>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <ErrorBoundary>
+        <Main
+          handleInputChange={handleInputChange}
+          handleClick={handleClick}
+          handlePrev={handlePrev}
+          handleNext={handleNext}
+          text={searchValue}
+          data={cardsData}
+          isFetching={isLoading}
+          errorMessage={error}
+        />
+      </ErrorBoundary>
+    </>
+  );
+};
 
 export default App;
