@@ -1,12 +1,13 @@
 import type { JSX } from 'react';
 import { CardProps } from './types.ts';
+import { NavLink } from 'react-router';
 import './styles.css';
 
 const Card = (props: CardProps): JSX.Element => {
-  const { name, url, comics, series, stories } = props;
+  const { id, name, url, comics, series, stories } = props;
 
   return (
-    <div className="card">
+    <NavLink to={`/${id}`} className="card">
       <img src={url} alt="Hero Image" />
 
       <div className="title">
@@ -27,7 +28,7 @@ const Card = (props: CardProps): JSX.Element => {
           <span className="info-value">{stories?.available}</span>
         </p>
       </div>
-    </div>
+    </NavLink>
   );
 };
 

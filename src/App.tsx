@@ -1,9 +1,10 @@
-import { JSX, ChangeEvent, useState, useEffect, useCallback } from 'react';
-import Main from './components/Main';
-import ErrorBoundary from './components/ErrorBoundary';
+import { JSX, ChangeEvent, useState, useEffect, useCallback, useRef } from 'react';
+import { Outlet, useNavigate } from 'react-router';
 import { getMarvelData } from './api';
 import { MarvelItem } from './api/interfaces';
-import useLocalStorage from './hooks/useLocalStorage';
+import useLocalStorage from './hooks/useLocalStorage.ts';
+import useSearchParams from './hooks/useSearchParams';
+import { Header, List, ErrorBoundary, ErrorButton } from './components';
 import './App.css';
 
 const App = (): JSX.Element => {
@@ -11,15 +12,21 @@ const App = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [total, setTotal] = useState<number>(10);
-  const [offset, setOffset] = useState<number>(0);
+
   const limit: number = 10;
 
-  const [localStorageValue, setLocalStorageStateValue] = useLocalStorage('search-value', '');
-  const [searchValue, setSearchValue] = useState<string>(localStorageValue);
+  const navigate = useRef(useNavigate());
+
+  const [search, page] = useSearchParams();
+  const [offset, setOffset] = useState<number>(Number(page) - 1);
+  const [localStorageValue = '', setLocalStorageStateValue] = useLocalStorage('search-value', '');
+  const [searchLSQuery, setSearchLSQueryValue] = useLocalStorage('search-query', '');
+  const [searchValue, setSearchValue] = useState<string>(String(search) || localStorageValue);
 
   const fetchData = useCallback(async () => {
+    const currentSearchValue = searchValue ? searchValue : localStorageValue;
     try {
-      await getMarvelData(limit, offset, searchValue).then((res) => {
+      await getMarvelData(limit, offset, currentSearchValue).then((res) => {
         setCardsData(res?.data?.data?.results);
         setTotal(res?.data?.data?.total);
       });
@@ -30,13 +37,17 @@ const App = (): JSX.Element => {
       setIsLoading(false);
       setError('');
     }
-  }, [offset, searchValue]);
+  }, [offset, searchValue, localStorageValue]);
+
+  useEffect(() => {
+    navigate.current(searchLSQuery);
+  }, [searchLSQuery]);
 
   useEffect(() => {
     setIsLoading(true);
 
     fetchData();
-  }, [fetchData, searchValue]);
+  }, [searchLSQuery, fetchData]);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -51,38 +62,33 @@ const App = (): JSX.Element => {
     fetchData();
   };
 
-  const handleNext = (): void => {
-    if (total - offset < limit) {
-      return;
-    }
-    setOffset((prevValue) => prevValue + limit);
-    handleClick();
-  };
-
-  const handlePrev = (): void => {
-    if (offset === 0) {
-      return;
-    }
-
-    setOffset((prevValue) => prevValue - limit);
-    handleClick();
+  const handleNext = (page: number): void => {
+    const newQuery = `/?search=${search}&page=${page}`;
+    setOffset(page * 10 - 10);
+    setSearchLSQueryValue('search-query', newQuery);
   };
 
   return (
-    <>
-      <ErrorBoundary>
-        <Main
+    <div className="main-wrapper">
+      <div className="main-content">
+        <Header
           handleInputChange={handleInputChange}
           handleClick={handleClick}
-          handlePrev={handlePrev}
           handleNext={handleNext}
           text={searchValue}
-          data={cardsData}
-          isFetching={isLoading}
-          errorMessage={error}
+          total={total}
+          offset={offset}
         />
+
+        <List errorMessage={error} items={cardsData} isFetching={isLoading} />
+      </div>
+
+      <ErrorBoundary>
+        <ErrorButton />
       </ErrorBoundary>
-    </>
+
+      <Outlet />
+    </div>
   );
 };
 

@@ -5,6 +5,7 @@ export interface ListData {
 }
 
 export interface PaginationProps {
-  handlePrev: () => void;
-  handleNext: () => void;
+  total: number;
+  offset: number;
+  handleNext: (page: number) => void;
 }

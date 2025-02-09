@@ -1,6 +1,12 @@
 import axios from 'axios';
 import md5 from 'md5';
-import { API_URL, PUBLIC_KEY, PRIVATE_KEY } from './constants';
+import {
+  API_URL,
+  API_URL_CHARACTERS,
+  PUBLIC_KEY,
+  PUBLIC_KEY_CHARACTERS,
+  PRIVATE_KEY,
+} from './constants';
 import { MarvelDataResponse } from './interfaces';
 
 export async function getMarvelData(
@@ -24,4 +30,12 @@ export async function getMarvelData(
     },
     data: undefined,
   });
+}
+
+export async function getDetails(id: string) {
+  const hash = 'd516513ba95b9407c7aca0f73b241f8a';
+
+  return axios.get(
+    `${API_URL_CHARACTERS}/characters/${id}?ts=1&apikey=${PUBLIC_KEY_CHARACTERS}&hash=${hash}`,
+  );
 }

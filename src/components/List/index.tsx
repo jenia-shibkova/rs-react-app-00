@@ -1,8 +1,6 @@
 import { JSX } from 'react';
 import { ListProps } from './types.ts';
-import Card from '../Card';
-import Loader from '../Loader';
-import EmptyState from '../EmptyState';
+import { Card, Loader, EmptyState } from '../../components';
 import './styles.css';
 
 const List = (props: ListProps): JSX.Element => {
@@ -31,9 +29,10 @@ const List = (props: ListProps): JSX.Element => {
           {items.map((item, i) => {
             return (
               <Card
+                id={item.id}
                 key={i}
-                name={item.name}
-                url={`${item.thumbnail.path}.${item.thumbnail.extension}`}
+                name={item?.name}
+                url={`${item?.thumbnail?.path}.${item?.thumbnail?.extension}`}
                 comics={item.comics}
                 series={item.series}
                 stories={item.stories}
