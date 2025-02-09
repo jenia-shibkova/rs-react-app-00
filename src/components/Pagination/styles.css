@@ -1,0 +1,26 @@
+.pagination {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  cursor: auto;
+  padding: 0;
+  background-color: white;
+  flex-wrap: wrap;
+}
+
+.center {
+  max-width: 200px;
+}
+
+@media (max-width: 1024px) {
+  .pagination {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination {
+    gap: 5px;
+  }
+}

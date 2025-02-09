@@ -1,0 +1,21 @@
+.button {
+  margin: 5px;
+  padding: 8px;
+  align-content: center;
+
+  &:hover {
+    opacity: 0.8;
+    color: black;
+  }
+}
+
+.inactive {
+  opacity: 0.2;
+  cursor: auto;
+}
+
+.active {
+  background-color: #b41f23;
+  border-radius: 6px;
+  color: white;
+}
