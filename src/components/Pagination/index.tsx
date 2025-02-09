@@ -32,7 +32,7 @@ const Pagination = ({ total, offset, handleNext }: PaginationProps): JSX.Element
   const resultPages = ['prev', ...getPageNumbers(), 'next'];
 
   return (
-    <div className="pagination" data-testid="paginator">
+    <div className="pagination" data-testid="pagination">
       {resultPages.map((item, index) => {
         if (item === 'prev') {
           return (

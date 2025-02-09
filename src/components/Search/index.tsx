@@ -20,7 +20,7 @@ const Search = (props: SearchProps): JSX.Element => {
   };
 
   return (
-    <div className="search-wrapper">
+    <div className="search-wrapper" data-testid="search">
       <form className="search-box" onSubmit={handleSubmit}>
         <div className="icon-search">
           <SearchIcon />

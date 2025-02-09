@@ -4,7 +4,7 @@ import { Card, Loader, EmptyState } from '../../components';
 import './styles.css';
 
 const List = (props: ListProps): JSX.Element => {
-  const { items, isFetching, errorMessage } = props;
+  const { items, isFetching, errorMessage = '' } = props;
 
   if (isFetching) {
     return (

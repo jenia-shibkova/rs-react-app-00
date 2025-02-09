@@ -32,7 +32,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             <div className="error-overlay" onClick={this.handleClose}></div>
             <div className="error-inner">
               <p className="error-title">Something went wrong</p>
-              <button className="error-btn" onClick={this.handleClose}>
+              <button className="error-btn" onClick={this.handleClose} data-testid="close">
                 Close
               </button>
             </div>

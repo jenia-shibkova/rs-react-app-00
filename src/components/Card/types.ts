@@ -1,8 +1,8 @@
 export interface CardProps {
   id: number;
-  name?: string;
+  name: string;
   url?: string;
-  comics?: {
+  comics: {
     available: number;
     collectionURI: string;
     items: Array<{
@@ -11,7 +11,7 @@ export interface CardProps {
     }>;
     returned: number;
   };
-  series?: {
+  series: {
     available: number;
     collectionURI: string;
     items: Array<{
@@ -20,7 +20,7 @@ export interface CardProps {
     }>;
     returned: number;
   };
-  stories?: {
+  stories: {
     available: number;
     collectionURI: string;
     items: Array<{
