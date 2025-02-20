@@ -1,16 +1,20 @@
 import { JSX } from 'react';
-import './styles.css';
+import classNames from 'classnames';
 import Search from '../Search';
 import Pagination from '../Pagination';
 import { HeaderProps } from './types.ts';
+import useTheme from '../../hooks/useTheme';
+import styles from './header.module.css';
 
 const Header = (props: HeaderProps): JSX.Element => {
   const { handleInputChange, handleClick, handleNext, text, total, offset } = props;
 
+  const { theme } = useTheme();
+
   return (
     <>
-      <div className="header">
-        <div className="logo">
+      <div className={classNames(styles.header, styles[theme])}>
+        <div className={styles.logo}>
           <svg width="130" height="52" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <rect fill="#EC1D24" width="100%" height="100%"></rect>
             <path

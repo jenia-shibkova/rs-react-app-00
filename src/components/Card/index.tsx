@@ -1,37 +1,41 @@
 import type { JSX } from 'react';
+import classNames from 'classnames';
 import { CardProps } from './types.ts';
 import { NavLink } from 'react-router';
-import './styles.css';
+import useTheme from '../../hooks/useTheme.ts';
+import styles from './card.module.css';
 
 const Card = (props: CardProps): JSX.Element => {
   const { id, name, url, comics, series, stories } = props;
-  console.log('props', props);
+
+  const { theme } = useTheme();
+
   return (
-    <NavLink to={`/${id}`} className="card">
+    <NavLink to={`/${id}`} className={styles.card}>
       <img src={url} alt="Hero Image" />
 
-      <div className="title">
-        <h3 className="name" data-testid="name">
+      <div className={classNames(styles.title, styles[theme])}>
+        <h3 className={classNames(styles.name, styles[theme])} data-testid="name">
           {name}
         </h3>
       </div>
 
-      <div className="card-hover">
-        <p className="item-info">
-          <span className="info-name">Comics:</span>
-          <span className="info-value" data-testid="comics">
+      <div className={styles.cardHover}>
+        <p className={styles.itemInfo}>
+          <span className={styles.infoName}>Comics:</span>
+          <span className={styles.infoValue} data-testid="comics">
             {comics.available}
           </span>
         </p>
-        <p className="item-info">
-          <span className="info-name">Series:</span>
-          <span className="info-value" data-testid="series">
+        <p className={styles.itemInfo}>
+          <span className={styles.infoName}>Series:</span>
+          <span className={styles.infoValue} data-testid="series">
             {series.available}
           </span>
         </p>
-        <p className="item-info">
-          <span className="info-name">Stories:</span>
-          <span className="info-value" data-testid="stories">
+        <p className={styles.itemInfo}>
+          <span className={styles.infoName}>Stories:</span>
+          <span className={styles.infoValue} data-testid="stories">
             {stories.available}
           </span>
         </p>

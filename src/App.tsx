@@ -1,17 +1,21 @@
 import { JSX, ChangeEvent, useState, useEffect, useCallback, useRef } from 'react';
 import { Outlet, useNavigate } from 'react-router';
+import classNames from 'classnames';
 import { getMarvelData } from './api';
 import { MarvelItem } from './api/interfaces';
 import useLocalStorage from './hooks/useLocalStorage.ts';
 import useSearchParams from './hooks/useSearchParams';
+import useTheme from './hooks/useTheme';
 import { Header, List, ErrorBoundary, ErrorButton } from './components';
-import './App.css';
+import styles from './App.module.css';
 
 const App = (): JSX.Element => {
   const [cardsData, setCardsData] = useState<MarvelItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [total, setTotal] = useState<number>(10);
+
+  const { theme, toggleTheme } = useTheme();
 
   const limit: number = 10;
 
@@ -69,8 +73,11 @@ const App = (): JSX.Element => {
   };
 
   return (
-    <div className="main-wrapper">
-      <div className="main-content">
+    <div className={classNames(styles.mainWrapper, styles[theme])}>
+      <button className={styles.themeBtn} onClick={toggleTheme}>
+        {theme}
+      </button>
+      <div className={styles.mainContent}>
         <Header
           handleInputChange={handleInputChange}
           handleClick={handleClick}
